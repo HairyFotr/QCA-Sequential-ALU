@@ -93,7 +93,8 @@
  \hyphenrules{english}
 \fi
 
-\RequirePackage[dvipdfm]{color}
+%\RequirePackage[dvipdfm]{color}
+\RequirePackage{color}
 
 \definecolor{PCG3M}{rgb}{0.8118,0.7961,0.7725}%{cmyk}{0,0,0,.17}
 \definecolor{PCG9M}{rgb}{0.5569,0.5490,0.5412}%{cmyk}{0,.01,0,.51}
@@ -1142,7 +1143,7 @@ $$\halign to
 \newcommand{\sidecmnt}[2]{\if@notes{{\color{PCG9M}{#1}\normalcolor}\marginpar{\raggedright\hspace{0pt}\tiny\color{red}{\sf #2}\normalcolor}}\else{#1}\fi}
 \newcommand{\cmnt}[1]{\if@notes{\color{PCG9M}{#1}\normalcolor}\else{}\fi}
 
-\RequirePackage[dvipdfm,unicode,colorlinks,citecolor=P654M,linkcolor=P654M,urlcolor=P654M,plainpages=false,linktocpage=true,pdfpagelabels=false,hyperfigures=true]{hyperref}
+\RequirePackage[unicode,colorlinks,citecolor=P654M,linkcolor=P654M,urlcolor=P654M,plainpages=false,linktocpage=true,pdfpagelabels=false,hyperfigures=true]{hyperref}
 
 % define href if undefined
 \@ifundefined{href}{\def\href#1#2{#2}} % revert to normal text if href undefined
