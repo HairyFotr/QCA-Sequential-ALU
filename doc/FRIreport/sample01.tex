@@ -1,0 +1,98 @@
+%interno poroèilo
+%\documentclass[internal, slovene]{FRIreport}
+
+%zakljuèno poroèilo
+%\documentclass[slovene]{FRIreport}
+
+%seminarska naloga
+\documentclass[seminar, slovene]{FRIreport}
+
+% AMS fonts required
+\usepackage{iopams}  
+
+% package to include graphics in ps, eps or png format
+\usepackage{graphicx}
+% the graphics path
+\graphicspath{{img/}}
+
+% define equation referencing
+\newcommand{\eqref}[1]{(\ref{#1})}
+
+% define figure referencing
+\newcommand{\figref}[1]{\ref{#1}}
+
+% define real numbers symbol
+\newcommand{\Rset}{\ensuremath{\mathbb{R}}} 
+\newcommand{\R}{\Rset} 
+% define natural numbers symbol
+\newcommand{\Nset}{\ensuremath{\mathbb{N}}} 
+\newcommand{\N}{\Nset} 
+% define euclidean vector space symbol
+\newcommand{\Eset}{\ensuremath{\mathbb{E}}} 
+\newcommand{\E}{\Eset} 
+
+\newcommand{\imp}[1]{{\color{P654M}#1\normalcolor}}
+
+%main
+\begin{document}
+
+\title{qdCAD: revolucionarni QCA simulator}
+
+\author[M Moškon \etal]{Miha Moškon, Primož Peèar, Iztok Lebar Bajec}
+
+\address{Skupina 1}
+
+\begin{abstract}
+Kratek povzetek je vedno priporoèljiv saj omogoèa bralcu hitro o\-ce\-no ali je poroèilo zanj zanimivo ali ne. Povzetek mora biti napisan tako, da strnjeno opiše vsebino in hkrati poskuša pritegniti bralca. 
+
+\Keywords{kvantni celièni avtomat, modeliranje in simulacija}
+\end{abstract}
+
+
+
+%
+%%
+\section{Uvod}
+%
+QCADesigner \cite{walus:2004}, ... trojiška logika na osnovi trojiških kvantnih celiènih avtomatov \cite{lebar_bajec:2005c,lebar_bajec:2006a,lebar_bajec:2006b}.
+
+%
+%%
+\section{Metode}
+%
+predstavi uporabljene metode
+
+%
+%%
+\subsection{Metoda 1}
+%
+groba predstavitev metode
+ 
+%
+%%
+\section{Rezultati}
+%
+prikaži rezultate z uporabo slik ali grafov kot na sliki \figref{fig.Df} in jih obrazloži
+%
+\begin{figure}[htb]
+\includegraphics{fig.Df.eps}
+\caption{Uporabi slike za prikaz rezultatov.}
+\label{fig.Df}
+\end{figure}
+%
+
+%
+%%
+\section{Zakljuèek}
+%
+zakljuèi z nekaj izhodišèi za nadaljnje delo
+
+%
+%%
+\References
+%
+\bibliographystyle{elsart-num-sl}
+%
+\bibliography{sample}
+
+\end{document}
