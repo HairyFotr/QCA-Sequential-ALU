@@ -83,7 +83,7 @@
 \pretolerance=50%5000
 \tolerance=80%8000
 
-\RequirePackage[cp1250]{inputenc}
+\RequirePackage[utf8x]{inputenc}
 
 \if@slovene
  \RequirePackage[slovene]{babel}
