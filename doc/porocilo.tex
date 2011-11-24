@@ -43,6 +43,15 @@
 \usetikzlibrary{circuits.logic.US}
 \usepackage{circuitikz}
 
+\newenvironment{vezje}{
+\pgfkeys{
+	and/.style={draw, very thin, minimum size=0.6cm, on chain=trak},
+	%nadzorna enota
+	head/.style={draw, minimum width=2cm, minimum height=1.2cm}
+}
+\begin{tikzpicture}}{\end{tikzpicture}}
+
+
 %main
 \begin{document}
 
@@ -61,15 +70,15 @@ V seminarju bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati,
 %
 %%
 \section{Uvod}
-Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost čipov, grajenih na siliciju, dosegla končno stopnjo in bo potrebno za večjo procesno moč preiti na drug osnovni material in najverjetneje tudi zelo drugačen pristop k modeliranju vezij. Ena izmed obetajočih alternativ so kvantni celični avtomati \angl{QCA}, ki obljubljajo mnoge prednosti pred klasičinimi vezji:
+Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost čipov, grajenih na siliciju, dosegla končno stopnjo in bo potrebno za večjo procesno moč preiti na drug osnovni material in najverjetneje tudi zelo spremeniti pristop k modeliranju vezij. Ena izmed obetajočih alternativ so kvantni celični avtomati \angl{quantum cellular automata -- QCA}, ki obljubljajo mnoge prednosti pred klasičinimi vezji:
 \begin{itemize}
-\item Večnivojska vezja
+\item Možnost večnivojskih vezij
 \item Možnost križanja vodil
 \item Enostavna realizacija nekaterih časovnih vezij
 \item Potencialno nižja poraba in višji takt delovanja
-\item ...
+\item $\dots$
 \end{itemize}
-V tem seminarju bomo opisali zasnovo sekvenčne ALE, z uporabo odprtokodnega programa QCADesigner\cite{walus:2004}. Sekvenčnost enote tu pomeni, da enota načeloma ne izvaja operacij nad vsebino končno dolgih registrov, ampak sprejema tok(sekvenco) bitov, nad njimi izvaja operacije in kot tok bitov podaja tudi svoj izhod. Kot bomo videli v nadaljevanju, to za določene operacije ni povsem možno in jih interno še vedno realiziramo z registri. Za večino osnovnih operacij pa je sekvenčna implementacija možna in se lepo prilega realizaciji s QCA-ji.
+V tem seminarju bomo opisali zasnovo sekvenčne ALE, ki smo jo modelirali z uporabo odprtokodnega programa QCADesigner\cite{walus:2004} (za skice logičnih vezij smo uporabili TinyCAD). Sekvenčnost enote tu pomeni, da enota načeloma ne izvaja operacij nad vsebino končno dolgih registrov, ampak sprejema tok(sekvenco) bitov, nad posameznimi biti izvaja operacije in tudi svoj izhod podaja kot tok bitov. Kot bomo videli v nadaljevanju, to za določene operacije ni možno in jih interno še vedno realiziramo z registri. Za večino osnovnih operacij pa je sekvenčna implementacija možna in se lepo prilega realizaciji s QCA-ji.
 
 %
 %%
@@ -77,19 +86,19 @@ V tem seminarju bomo opisali zasnovo sekvenčne ALE, z uporabo odprtokodnega pro
 V tem odseku bomo predstavili nekatere odločitve in metode snovanja, ki smo jih uporabili pri zasnovi naše ALE.
 
 \subsection{Osnovni opis ALE}
-Implementiran je logično poln sistem operacij. Za izbiro operacije so uporabljeni trije biti. Naša ALE bo podpirala naslednje operacije:
+Implementirali smo logično poln sistem operacij. Za izbiro operacije smo uporabili tri bite. Naša ALE bo podpirala naslednje operacije: (NI ŠE PRAVA TABELA!)
 
 \begin{center}
 \begin{tabular}{ | c | c | c | }\hline
-Operacija & Oznaka & Operacijska koda \\ \hline
-NOP & $\varnothing$   & 000 \\
-NOT & $\lnot$ & 001 \\
-AND & $\wedge$ & 010 \\
-OR & $\vee$ & 011 \\
-SUM & $+$ & 100 \\
-SUB & $-$ & 101 \\
-MUL & $\times$ & 110 \\
-DIV & $\div$ & 111 \\ \hline
+\textbf{Operacija} & \textbf{Oznaka} & \textbf{Operacijska koda} \\ \hline
+NOP & $\varnothing$ & 0 0 0 \\
+NOT & $\lnot$ & 0 0 1 \\
+AND & $\wedge$ & 0 1 0 \\
+OR & $\vee$ & 0 1 1 \\
+ADD & $+$ & 1 0 0 \\
+SUB & $-$ & 1 0 1 \\
+MUL & $\times$ & 1 1 0 \\
+DIV & $\div$ & 1 1 1 \\ \hline
 \end{tabular}
 \end{center}
 
@@ -97,74 +106,30 @@ DIV & $\div$ & 111 \\ \hline
 %%
 \section{Rezultati}
 \subsection{Izbira operacije}
-Multiplekser.
+\begin{figure}[htb]
+\includegraphics[width=15cm]{vezja/img/demux.png}
+\caption{Demultiplekser}
+\label{demux}
+\end{figure}
+\pagebreak
 
-\subsection{Vsaka}
-\subsection{Operacija}
-\subsection{Posebej}
-
-
-\subsection{Also,vezja}
-%shapes.gates.logic.US
-%no way, da bi to uporabil...
-\begin{tikzpicture}[minimum height=1cm]
-\node(q1) [] at (0,0) {$q_1$};
-\node(and1) [draw, and gate US] at (2,0) {};
-\node(and2) [draw, and gate US] at (2,2) {};
-
-\draw (q1.east) -- (and1.input 1);
-\end{tikzpicture}
-\ \\ \ \\
-%circuits.logic.US
-\begin{tikzpicture}[circuit logic US]
-\matrix[column sep=7mm]{
-		& \node [and gate] (a1) {}; & \\
-	\node (i1) {0}; & & \node [or gate] (o) {};\\
-		& \node [nand gate] (a2) {}; & \\
-	\node (i2) {1}; & & \\
-};
-\draw 
-(i1.east) -- ++(right:3mm) |- (a1.input 2)
-(i1.east) -- ++(right:3mm) |- (a2.input 1)
-(i2.east) -- ++(right:3mm) |- (a2.input 2)
-(a1.output) -- ++(right:3mm) |- (o.input 1)
-(a2.output) -- ++(right:2mm) |- (o.input 2)
-(o.output) -- ++(right:3mm)
-%povezave nazaj so problematične
-(o.output) -- ++(right:3mm) -- ++(up:12mm) -- ++(left:30mm) |- (a1.input 1)++(right:3mm)
-;
-\end{tikzpicture}
-\ \\ \ \\
-%circuitikz
-%(pomojem skor isti način dela kot gor)
-\begin{circuitikz}\draw
-	(0,2) node[and port] (and1) {}
-	(0,0) node[and port] (and2) {}
-	(2,1) node[xnor port] (xnor) {}
-	
-	(and1.in 1) node[anchor=east] {q1}
-	(and1.in 2) node[anchor=east] {q2}
-
-	(and1.out) -| (xnor.in 1)
-	(and2.out) -| (xnor.in 2)
-	%nope
-	%(xnor.out) |- (and1.in 2) 
-	(and1.in 1)++(0,1) node (and1above) {}
-	(xnor.out)++(0,2) node (xorabove) {}
-	(xnor.out) |- (xorabove.south) |- (and1above.south) |- (and1.in 1)
-;\end{circuitikz}
+\subsection{Seštevalnik}
+\begin{figure}[htb]
+\includegraphics[width=14cm]{vezja/img/sestevalnik.png}
+\caption{Seštevalnik}
+\label{sestevalnik}
+\end{figure}
+\pagebreak
 
 %
 %%
 \section{Zaključek}
-Zaključi z nekaj izhodišči za nadaljnje delo.
+Zaključki z nekaj izhodišči za nadaljnje delo.
 
 %
 %%
 \References
-%
 \bibliographystyle{elsart-num-sl}
-%
 \bibliography{sample}
 
 \end{document}
