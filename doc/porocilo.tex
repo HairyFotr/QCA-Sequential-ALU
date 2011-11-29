@@ -1,9 +1,3 @@
-%interno poro�ilo
-%\documentclass[internal, slovene]{FRIreport}
-
-%zaklju�no poro�ilo
-%\documentclass[slovene]{FRIreport}
-
 %seminarska naloga
 \documentclass[seminar, slovene]{FRIreport}
 
@@ -37,21 +31,6 @@
 %%%
 \newcommand{\angl}[1]{(\textit{angl.} #1)}
 
-
-\usepackage{tikz}
-\usetikzlibrary{shapes.gates.logic.US}
-\usetikzlibrary{circuits.logic.US}
-\usepackage{circuitikz}
-
-\newenvironment{vezje}{
-\pgfkeys{
-	and/.style={draw, very thin, minimum size=0.6cm, on chain=trak},
-	%nadzorna enota
-	head/.style={draw, minimum width=2cm, minimum height=1.2cm}
-}
-\begin{tikzpicture}}{\end{tikzpicture}}
-
-
 %main
 \begin{document}
 
@@ -70,7 +49,13 @@ V seminarju bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati,
 %
 %%
 \section{Uvod}
-Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost čipov, grajenih na siliciju, dosegla končno stopnjo in bo potrebno za večjo procesno moč preiti na drug osnovni material in najverjetneje tudi zelo spremeniti pristop k modeliranju vezij. Ena izmed obetajočih alternativ so kvantni celični avtomati \angl{quantum cellular automata -- QCA}, ki obljubljajo mnoge prednosti pred klasičinimi vezji:
+\subsection{Ideja}
+V tem seminarju bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati \angl{quantum cellular automata -- QCA}, ki smo jo modelirali z uporabo odprtokodnega programa QCADesigner\cite{walus:2004} (za skice logičnih vezij smo uporabili TinyCAD). 
+\ \\ \ \\
+Sekvenčnost enote tu pomeni, da enota ne izvaja operacij nad vsebino končno dolgih registrov, ampak sprejema tok bitov, nad posameznimi biti izvaja operacije in tudi svoj izhod podaja kot tok bitov. Za določene operacije tak pristop ni praktičen, ali pa je celo nemogoč, je pa mogoče na tak način implementirati poln funkcijski sistem, kar smo v nalogi tudi storili. 
+
+\subsection{Motivacija}
+Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost čipov, grajenih na siliciju, dosegla končno stopnjo in bo potrebno za večjo procesno moč preiti na drug osnovni material in najverjetneje tudi zelo spremeniti pristop k modeliranju vezij. Ena izmed obetajočih alternativ so kvantni celični avtomati, ki obljubljajo mnoge prednosti pred klasičinimi vezji:
 \begin{itemize}
 \item Možnost večnivojskih vezij
 \item Možnost križanja vodil
@@ -78,7 +63,6 @@ Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost č
 \item Potencialno nižja poraba in višji takt delovanja
 \item $\dots$
 \end{itemize}
-V tem seminarju bomo opisali zasnovo sekvenčne ALE, ki smo jo modelirali z uporabo odprtokodnega programa QCADesigner\cite{walus:2004} (za skice logičnih vezij smo uporabili TinyCAD). Sekvenčnost enote tu pomeni, da enota načeloma ne izvaja operacij nad vsebino končno dolgih registrov, ampak sprejema tok(sekvenco) bitov, nad posameznimi biti izvaja operacije in tudi svoj izhod podaja kot tok bitov. Kot bomo videli v nadaljevanju, to za določene operacije ni možno in jih interno še vedno realiziramo z registri. Za večino osnovnih operacij pa je sekvenčna implementacija možna in se lepo prilega realizaciji s QCA-ji.
 
 %
 %%
@@ -86,19 +70,14 @@ V tem seminarju bomo opisali zasnovo sekvenčne ALE, ki smo jo modelirali z upor
 V tem odseku bomo predstavili nekatere odločitve in metode snovanja, ki smo jih uporabili pri zasnovi naše ALE.
 
 \subsection{Osnovni opis ALE}
-Implementirali smo logično poln sistem operacij. Za izbiro operacije smo uporabili tri bite. Naša ALE bo podpirala naslednje operacije: (NI ŠE PRAVA TABELA!)
-
+Implementirali smo poln funkcijski sistem operacij. Za izbiro operacije smo uporabili dva bita. Naša ALE podpira naslednje operacije:\\
 \begin{center}
 \begin{tabular}{ | c | c | c | }\hline
-\textbf{Operacija} & \textbf{Oznaka} & \textbf{Operacijska koda} \\ \hline
-NOP & $\varnothing$ & 0 0 0 \\
-NOT & $\lnot$ & 0 0 1 \\
-AND & $\wedge$ & 0 1 0 \\
-OR & $\vee$ & 0 1 1 \\
-ADD & $+$ & 1 0 0 \\
-SUB & $-$ & 1 0 1 \\
-MUL & $\times$ & 1 1 0 \\
-DIV & $\div$ & 1 1 1 \\ \hline
+\textbf{Operacija} & \textbf{Oznaka} & \textbf{Op. koda} \\ \hline
+NOT & $\lnot$ & 0\,0 \\
+AND & $\wedge$ & 0\,1 \\
+ADD & $\oplus$ & 1\,0 \\
+SUB & $\ominus$ & 1\,1 \\ \hline
 \end{tabular}
 \end{center}
 
@@ -106,6 +85,7 @@ DIV & $\div$ & 1 1 1 \\ \hline
 %%
 \section{Rezultati}
 \subsection{Izbira operacije}
+Izbira operacije je realizirana s demultiplekserjem
 \begin{figure}[htb]
 \includegraphics[width=15cm]{vezja/img/demux.png}
 \caption{Demultiplekser}
@@ -113,7 +93,8 @@ DIV & $\div$ & 1 1 1 \\ \hline
 \end{figure}
 \pagebreak
 
-\subsection{Seštevalnik}
+\subsection{Seštevalnik/Odštevalnik}
+Seštevalnik in odštevalnik smo realizirali v enem kosu, tako, da pri odštevanju drugo število negiramo in na začetku prištejemo 1, kot da bi bilo zapisano v predstavitvi z dvojnim komplementom.
 \begin{figure}[htb]
 \includegraphics[width=14cm]{vezja/img/sestevalnik.png}
 \caption{Seštevalnik}
