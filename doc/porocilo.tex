@@ -41,7 +41,7 @@
 %\address{Skupina 1}
 
 \begin{abstract}
-V seminarju bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati, z uporabo programa QCAdesigner.
+V seminarski nalogi bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati, z uporabo programa QCAdesigner.
 
 \Keywords{kvantni celični avtomati, aritmetično-logična enota, modeliranje in simulacija}
 \end{abstract}
@@ -50,12 +50,12 @@ V seminarju bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati,
 %%
 \section{Uvod}
 \subsection{Ideja}
-V tem seminarju bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati \angl{quantum cellular automata -- QCA}, ki smo jo modelirali z uporabo odprtokodnega programa QCADesigner\cite{walus:2004} (za skice logičnih vezij smo uporabili TinyCAD). 
+V tej seminarski nalogi bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati \angl{quantum cellular automata -- QCA}. Modelirali jo bomo z uporabo odprtokodnega programa QCADesigner\cite{walus:2004}, za skice logičnih vezij, pa bomo uporabili TinyCAD.
 \ \\ \ \\
-Sekvenčnost enote tu pomeni, da enota ne izvaja operacij nad vsebino končno dolgih registrov, ampak sprejema tok bitov, nad posameznimi biti izvaja operacije in tudi svoj izhod podaja kot tok bitov. Za določene operacije tak pristop ni praktičen, ali pa je celo nemogoč, je pa mogoče na tak način implementirati poln funkcijski sistem, kar smo v nalogi tudi storili. 
+Sekvenčnost enote tu pomeni, da enota ne izvaja operacij nad vsebino končno dolgih registrov, ampak sprejema tok bitov, nad posameznimi biti izvaja operacije in tudi svoj izhod podaja kot tok bitov. Za določene operacije tak pristop ni praktičen, ali pa je celo nemogoč, je pa mogoče na tak način implementirati poln funkcijski sistem, kar smo v nalogi tudi storili.
 
 \subsection{Motivacija}
-Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost čipov, grajenih na siliciju, dosegla končno stopnjo in bo potrebno za večjo procesno moč preiti na drug osnovni material in najverjetneje tudi zelo spremeniti pristop k modeliranju vezij. Ena izmed obetajočih alternativ so kvantni celični avtomati, ki obljubljajo mnoge prednosti pred klasičinimi vezji:
+Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost čipov, grajenih na siliciju, dosegla končno stopnjo in bo potrebno za večjo procesno moč preiti na drug osnovni material in najverjetneje tudi spremeniti pristop k modeliranju vezij. Ena izmed obetajočih alternativ so kvantni celični avtomati, ki obljubljajo mnoge prednosti pred klasičinimi vezji:
 \begin{itemize}
 \item Možnost večnivojskih vezij
 \item Možnost križanja vodil
@@ -67,10 +67,11 @@ Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost č
 %
 %%
 \section{Metode}
-V tem odseku bomo predstavili nekatere odločitve in metode snovanja, ki smo jih uporabili pri zasnovi naše ALE.
+V tem odseku bomo predstavili nekatere osnovne ideje in odločitve, ki smo jih nato uporabili pri realizaciji naše ALE.
 
-\subsection{Osnovni opis ALE}
-Implementirali smo poln funkcijski sistem operacij. Za izbiro operacije smo uporabili dva bita. Naša ALE podpira naslednje operacije:\\
+\subsection{Opis naloge}
+Realizirali bomo sekvenčno ALE, s funkcijsko polnim sistemom operacij. Za izbiro operacije bomo uporabili dva bita, enota pa bo podpirala naslednje operacije:\\
+\begin{table}[h!]
 \begin{center}
 \begin{tabular}{ | c | c | c | }\hline
 \textbf{Operacija} & \textbf{Oznaka} & \textbf{Op. koda} \\ \hline
@@ -80,23 +81,49 @@ ADD & $\oplus$ & 1\,0 \\
 SUB & $\ominus$ & 1\,1 \\ \hline
 \end{tabular}
 \end{center}
+\caption{Seznam operacij}
+\label{optable}
+\end{table}
+\subsection{Ideje za realizacijo}
+Operaciji NOT in AND sta že v osnovi bitni operaciji in je tako sekvenčna realizacija popolnoma naravna. Pri ADD tudi ni posebnih zapletov, pri SUB pa smo poskušali operirati, kot bi imeli števili zapisani v predstavitvi z dvojnim komplementom.
 
 %
 %%
 \section{Rezultati}
+V tem delu seminarske naloge bomo predstavili realizacijo posameznih delov ALE.
 \subsection{Izbira operacije}
-Izbira operacije je realizirana s demultiplekserjem
+Izbira operacije je realizirana z dvo-bitnim demultiplekserjem, ki izbira med operacijami NOT, AND, ADD in SUB, kot smo to zapisali v \autoref{optable}.
 \begin{figure}[htb]
-\includegraphics[width=15cm]{vezja/img/demux.png}
+\includegraphics[width=15cm]{vezja/img/demux}
 \caption{Demultiplekser}
 \label{demux}
 \end{figure}
 \pagebreak
 
-\subsection{Seštevalnik/Odštevalnik}
-Seštevalnik in odštevalnik smo realizirali v enem kosu, tako, da pri odštevanju drugo število negiramo in na začetku prištejemo 1, kot da bi bilo zapisano v predstavitvi z dvojnim komplementom.
+\subsection{Negacija}
+Negacijo (operacijo NOT) smo realizirali s polovičnim zamikom celice.
 \begin{figure}[htb]
-\includegraphics[width=14cm]{vezja/img/sestevalnik.png}
+\begin{center}
+\includegraphics[width=8cm]{qca/img/NOT}
+\caption{NOT vrata}
+\label{NOT}
+\end{center}
+\end{figure}
+
+\subsection{Konjunkcija}
+Konjunkcijo (operacijo AND) smo realizirali z majoritetnimi vrati, ki imajo enega izmed vhodov nastavljenega na polarizacijo -1.
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=5cm]{qca/img/AND}
+\caption{AND vrata}
+\label{AND}
+\end{center}
+\end{figure}
+
+\subsection{Seštevalnik/odštevalnik}
+Seštevalnik in odštevalnik (operaciji ADD in SUB), smo realizirali skupaj - pri odštevanju drugo število negiramo in mu pri prvem bitu prištejemo 1, kot da bi bilo zapisano v predstavitvi z dvojnim komplementom.
+\begin{figure}[htb]
+\includegraphics[width=14cm]{vezja/img/sestevalnik}
 \caption{Seštevalnik}
 \label{sestevalnik}
 \end{figure}
