@@ -10,6 +10,8 @@
 % the graphics path
 \graphicspath{{img/}}
 
+\usepackage{float}
+
 % define equation referencing
 \newcommand{\eqref}[1]{(\ref{#1})}
 
@@ -71,7 +73,7 @@ V tem odseku bomo predstavili nekatere osnovne ideje in odločitve, ki smo jih n
 
 \subsection{Opis naloge}
 Realizirali bomo sekvenčno ALE, s funkcijsko polnim sistemom operacij. Za izbiro operacije bomo uporabili dva bita, enota pa bo podpirala naslednje operacije:\\
-\begin{table}[h!]
+\begin{table}[H]
 \begin{center}
 \begin{tabular}{ | c | c | c | }\hline
 \textbf{Operacija} & \textbf{Oznaka} & \textbf{Op. koda} \\ \hline
@@ -80,9 +82,9 @@ AND & $\wedge$ & 0\,1 \\
 ADD & $\oplus$ & 1\,0 \\
 SUB & $\ominus$ & 1\,1 \\ \hline
 \end{tabular}
-\end{center}
 \caption{Seznam operacij}
 \label{optable}
+\end{center}
 \end{table}
 \subsection{Ideje za realizacijo}
 Operaciji NOT in AND sta že v osnovi bitni operaciji in je tako sekvenčna realizacija popolnoma naravna. Pri ADD s stališča sekvenčnosti delovanja tudi ni posebnih zapletov, pri SUB pa smo poskušali operirati, kot bi imeli števili zapisani v predstavitvi z dvojnim komplementom.
@@ -93,7 +95,7 @@ Operaciji NOT in AND sta že v osnovi bitni operaciji in je tako sekvenčna real
 V tem delu seminarske naloge bomo predstavili realizacijo posameznih delov ALE. Pri realizaciji smo si pomagali s knjigo\cite{virant:2007}.
 \subsection{Izbira operacije}
 Izbira operacije je realizirana z dvo-bitnim demultiplekserjem, ki izbira med operacijami NOT, AND, ADD in SUB, kot smo to zapisali v \autoref{optable}.
-\begin{figure}[h!]
+\begin{figure}[H]
 \includegraphics[width=15cm]{qca/img/demux}
 \caption{Demultiplekser}
 \label{demux}
@@ -101,17 +103,16 @@ Izbira operacije je realizirana z dvo-bitnim demultiplekserjem, ki izbira med op
 
 \subsection{Negacija}
 Negacijo (operacijo NOT) smo realizirali s polovičnim zamikom celice.
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=8cm]{qca/img/NOT}
 \caption{NOT vrata}
 \label{NOT}
 \end{center}
 \end{figure}
-
 \subsection{Konjunkcija}
 Konjunkcijo (operacijo AND) smo realizirali z majoritetnimi vrati, ki imajo enega izmed vhodov nastavljenega na polarizacijo -1.
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=5cm]{qca/img/AND}
 \caption{AND vrata}
@@ -120,11 +121,9 @@ Konjunkcijo (operacijo AND) smo realizirali z majoritetnimi vrati, ki imajo eneg
 \end{figure}
 
 \subsection{Seštevalnik/odštevalnik}
-Seštevalnik in odštevalnik (operaciji ADD in SUB), smo želeli realizirali skupaj -- pri odštevanju bi drugo število negirali in mu pri prvem bitu prišteli 1, kot da bi bilo zapisano v predstavitvi z dvojnim komplementom.\\
-\ \\
-Na žalost nam je uspelo realizirati le seštevalnik.
+Seštevalnik in odštevalnik (operaciji ADD in SUB), smo želeli realizirali skupaj -- pri odštevanju drugo število negiramo in mu pri prvem bitu prištejemo 1, kot da bi bilo zapisano v predstavitvi z dvojnim komplementom. To smo realizirali tako, da je možno določiti carry bit in bi ga pri prvem bitu operacije nastavili na 1.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=15cm]{qca/img/adder}
 \caption{Seštevalnik}
@@ -132,7 +131,7 @@ Na žalost nam je uspelo realizirati le seštevalnik.
 \end{center}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \includegraphics[width=14cm]{vezja/img/adder}
 \caption{Seštevalnik}
 \label{sestevalnik}
@@ -141,7 +140,7 @@ Na žalost nam je uspelo realizirati le seštevalnik.
 %
 %%
 \section{Zaključek}
-Zaključki z nekaj izhodišči za nadaljnje delo.
+Z veliko truda in težavami s QCAdesigner-jem, nam je uspelo realizirati posamezne dele ALE, ni pa nam uspelo komponent sestaviti skupaj.
 
 %
 %%
