@@ -38,7 +38,7 @@
 
 \author{Miha Zidar, Anže Pečar, Matic Potočnik, Željko Plesac, Jan Varljen}
 
-%\address{Skupina 1}
+\address{Skupina 2 in 4}
 
 \begin{abstract}
 V seminarski nalogi bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati, z uporabo programa QCAdesigner.
@@ -85,24 +85,23 @@ SUB & $\ominus$ & 1\,1 \\ \hline
 \label{optable}
 \end{table}
 \subsection{Ideje za realizacijo}
-Operaciji NOT in AND sta že v osnovi bitni operaciji in je tako sekvenčna realizacija popolnoma naravna. Pri ADD tudi ni posebnih zapletov, pri SUB pa smo poskušali operirati, kot bi imeli števili zapisani v predstavitvi z dvojnim komplementom.
+Operaciji NOT in AND sta že v osnovi bitni operaciji in je tako sekvenčna realizacija popolnoma naravna. Pri ADD s stališča sekvenčnosti delovanja tudi ni posebnih zapletov, pri SUB pa smo poskušali operirati, kot bi imeli števili zapisani v predstavitvi z dvojnim komplementom.
 
 %
 %%
 \section{Rezultati}
-V tem delu seminarske naloge bomo predstavili realizacijo posameznih delov ALE.
+V tem delu seminarske naloge bomo predstavili realizacijo posameznih delov ALE. Pri realizaciji smo si pomagali s knjigo\cite{virant:2007}.
 \subsection{Izbira operacije}
 Izbira operacije je realizirana z dvo-bitnim demultiplekserjem, ki izbira med operacijami NOT, AND, ADD in SUB, kot smo to zapisali v \autoref{optable}.
-\begin{figure}[htb]
-\includegraphics[width=15cm]{vezja/img/demux}
+\begin{figure}[h!]
+\includegraphics[width=15cm]{qca/img/demux}
 \caption{Demultiplekser}
 \label{demux}
 \end{figure}
-\pagebreak
 
 \subsection{Negacija}
 Negacijo (operacijo NOT) smo realizirali s polovičnim zamikom celice.
-\begin{figure}[htb]
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[width=8cm]{qca/img/NOT}
 \caption{NOT vrata}
@@ -112,7 +111,7 @@ Negacijo (operacijo NOT) smo realizirali s polovičnim zamikom celice.
 
 \subsection{Konjunkcija}
 Konjunkcijo (operacijo AND) smo realizirali z majoritetnimi vrati, ki imajo enega izmed vhodov nastavljenega na polarizacijo -1.
-\begin{figure}[htb]
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[width=5cm]{qca/img/AND}
 \caption{AND vrata}
@@ -121,13 +120,23 @@ Konjunkcijo (operacijo AND) smo realizirali z majoritetnimi vrati, ki imajo eneg
 \end{figure}
 
 \subsection{Seštevalnik/odštevalnik}
-Seštevalnik in odštevalnik (operaciji ADD in SUB), smo realizirali skupaj - pri odštevanju drugo število negiramo in mu pri prvem bitu prištejemo 1, kot da bi bilo zapisano v predstavitvi z dvojnim komplementom.
-\begin{figure}[htb]
-\includegraphics[width=14cm]{vezja/img/sestevalnik}
+Seštevalnik in odštevalnik (operaciji ADD in SUB), smo želeli realizirali skupaj -- pri odštevanju bi drugo število negirali in mu pri prvem bitu prišteli 1, kot da bi bilo zapisano v predstavitvi z dvojnim komplementom.\\
+\ \\
+Na žalost nam je uspelo realizirati le seštevalnik.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=15cm]{qca/img/adder}
+\caption{Seštevalnik}
+\label{sestevalnikqca}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\includegraphics[width=14cm]{vezja/img/adder}
 \caption{Seštevalnik}
 \label{sestevalnik}
 \end{figure}
-\pagebreak
 
 %
 %%
