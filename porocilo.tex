@@ -54,12 +54,12 @@ V seminarski nalogi bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi a
 %%
 \section{Uvod}
 \subsection{Ideja}
-V tej seminarski nalogi bomo opisali zasnovo sekvenčne ALE s kvantnimi celičnimi avtomati \angl{quantum cellular automata -- QCA}. Modelirali jo bomo z uporabo odprtokodnega programa QCADesigner\cite{walus:2004}, za skice logičnih vezij, pa bomo uporabili TinyCAD.
+V tej seminarski nalogi bomo opisali realizacijo sekvenčne ALE s kvantnimi celičnimi avtomati \angl{quantum cellular automata -- QCA}. Modelirali jo bomo z uporabo odprtokodnega programa QCADesigner\cite{walus:2004}, za skice logičnih vezij, pa bomo uporabili (tudi odprtokoden) program TinyCAD.
 \ \\ \ \\
-Sekvenčnost enote tu pomeni, da enota ne izvaja operacij nad vsebino končno dolgih registrov, ampak sprejema tok bitov, nad posameznimi biti izvaja operacije in tudi svoj izhod podaja kot tok bitov. Za določene operacije tak pristop ni praktičen, ali pa je celo nemogoč, je pa mogoče na tak način implementirati poln funkcijski sistem, kar smo v nalogi tudi storili.
+Sekvenčnost enote v tem kontekstu pomeni, da enota ne izvaja operacij nad vsebino končno dolgih registrov, kot smo navajeni pri klasični ALE, ampak sprejema tok bitov, izvaja operacije nad posameznimi biti, ter tudi svoj izhod podaja kot tok bitov. Za določene operacije tak pristop ni praktičen, ali pa je celo nemogoč (Primer: deljenje, korenjenje, kotne funkcije). Je pa na tak način mogoče implementirati poln funkcijski sistem, kar je cilj te seminarske naloge.
 
 \subsection{Motivacija}
-Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost čipov, grajenih na siliciju, dosegla končno stopnjo in bo potrebno za večjo procesno moč preiti na drug osnovni material in najverjetneje tudi spremeniti pristop k modeliranju vezij. Ena izmed obetajočih alternativ so kvantni celični avtomati, ki obljubljajo mnoge prednosti pred klasičinimi vezji:
+Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost čipov, grajenih na siliciju, dosegla končno stopnjo in bo potrebno za večjo procesno moč preiti na drug osnovni material in najverjetneje tudi precej spremeniti pristop k modeliranju vezij. Ena izmed obetajočih alternativ so kvantni celični avtomati, ki obljubljajo mnoge prednosti pred klasičinimi vezji:
 \begin{itemize}
 \item Možnost večnivojskih vezij
 \item Možnost križanja vodil
@@ -67,59 +67,101 @@ Predvideva se, da bo že čez nekaj desetletij minituarizacija in zmogljivost č
 \item Potencialno nižja poraba in višji takt delovanja
 \item $\dots$
 \end{itemize}
-
+\pagebreak
 %
 %%
 \section{Metode}
 V tem odseku bomo predstavili nekatere osnovne ideje in odločitve, ki smo jih nato uporabili pri realizaciji naše ALE.
 
-\subsection{Opis naloge}
-Realizirali bomo sekvenčno ALE, s funkcijsko polnim sistemom operacij. Za izbiro operacije bomo uporabili dva bita, enota pa bo podpirala naslednje operacije:\\
+\subsection{Osnovni opis enote}
+Realizirali bomo sekvenčno ALE, s funkcijsko polnim funkcijskim sistemom operacij. Enota bo imela dva podatkovna vhoda, ter dva vhoda za izbiro operacije. Enota bo podpirala naslednje operacije:\\
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{ | c | c | c | }\hline
 \textbf{Operacija} & \textbf{Oznaka} & \textbf{Op. koda} \\ \hline
-NOT & $\lnot$ & 0\,0 \\
-AND & $\wedge$ & 0\,1 \\
-ADD & $\oplus$ & 1\,0 \\
-SUB & $\ominus$ & 1\,1 \\ \hline
+Negacija & NOT & 0\,0 \\
+Konjunkcija & AND & 0\,1 \\
+Seštevanje & ADD & 1\,0 \\
+Odštevanje & SUB & 1\,1 \\ \hline
 \end{tabular}
 \caption{Seznam operacij}
 \label{optable}
 \end{center}
 \end{table}
 \subsection{Ideje za realizacijo}
-Operaciji NOT in AND sta že v osnovi bitni operaciji in je tako sekvenčna realizacija popolnoma naravna. Pri ADD s stališča sekvenčnosti delovanja tudi ni posebnih zapletov, pri SUB pa smo poskušali operirati, kot bi imeli števili zapisani v predstavitvi z dvojnim komplementom.
+\subsubsection{Glede sekvenčnosti}\ \\ \ \\
+Operaciji NOT in AND sta že v osnovi bitni operaciji in je tako sekvenčna realizacija popolnoma naravna. Pri ADD s stališča sekvenčnosti delovanja tudi ni posebnih zapletov, pri SUB pa lahko poskušamo operirati, kot bi imeli števili zapisani v predstavitvi z dvojnim komplementom.
 
+\subsubsection{Modeliranje}\ \\ \ \\
+Za modeliranje bomo, kot že omenjeno, uporabili program QCAdesigner.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=8.65cm]{qca/img/qcadesigner}
+\caption{QCAdesigner}
+\end{center}
+\end{figure}
 %
 %%
 \section{Rezultati}
-V tem delu seminarske naloge bomo predstavili realizacijo posameznih delov ALE. Pri realizaciji smo si pomagali s knjigo\cite{virant:2007}.
-\subsection{Izbira operacije}
-Izbira operacije je realizirana z dvo-bitnim demultiplekserjem, ki izbira med operacijami NOT, AND, ADD in SUB, kot smo to zapisali v \autoref{optable}.
+V tem delu seminarske naloge bomo predstavili realizacijo posameznih delov ALE. Pri realizaciji smo si pomagali s knjigo\cite{virant:2007}, ter diplomsko nalogo\cite{orac:2007}.
+\subsection{Shema enote}
+Imamo podatkovni liniji $X_1$ in $X_2$, ter naslovni liniji $A_1$ in $A_2$, ter izhod $Y$. Najprej z $A_1$ izberemo seštevanje(ADD) oz. odštevanje(SUB), ki sta realizirani v eni enoti. Operaciji konjunkcija(AND) in negacija(NOT) se vedno izvedeta, nato pa na koncu še izberemo, kateri izmed izhodov operacij se bo pojavil na izhodu $Y$.
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=14cm]{qca/img/demux}
-\caption{Demultiplekser}
-\label{demux}
+\includegraphics[width=16cm]{vezja/img/alu}
+\caption{Shema celotne enote}
 \end{center}
 \end{figure}
 
-\subsection{Negacija}
-\subsubsection{Operacija}\ \\ \ \\
+\begin{minipage}[H]{16cm}
+\subsection{Izbira operacije}
+Izbira med ADD in SUB:\\
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=13cm]{vezja/img/demuxmux}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=13cm]{qca/img/demuxmux}
+\end{center}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[H]{16cm}
+Izbira rezultata:\\
+\begin{center}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{vezja/img/mux}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=13cm]{qca/img/mux}
+\end{center}
+\end{figure}
+\end{center}
+\end{minipage}
+
+\subsection{Negacija (NOT)}
+\subsubsection{Opis operacije}\ \\ \ \\
 Negacija vrne obratno vrednost vhoda -- torej za 0 vrne 1 in obratno.
-\ \\ \ \\
-Enačba: $ out = \lnot x $
+\ \\
 \begin{table}[H]
+\begin{center}
+Enačba: $ Y = \lnot X_1 $\\  \ \\
 \begin{tabular}{ | c || c | }\hline
-$x$ & out \\ \hline
+$X_1$ & $Y$ \\ \hline
 0 & 1 \\
 1 & 0 \\ \hline
-\end{tabular}
+\end{tabular}\\ \ \\ \ \\
+Pravilnostna tabela NOT
+\end{center}
 \end{table}
 
 \subsubsection{Realizacija}\ \\ \ \\
-Negacijo (operacijo NOT) smo realizirali s polovičnim zamikom celice.
+Negacijo smo realizirali s polovičnim zamikom QCA celic.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=8cm]{qca/img/NOT}
@@ -127,23 +169,26 @@ Negacijo (operacijo NOT) smo realizirali s polovičnim zamikom celice.
 \label{NOT}
 \end{center}
 \end{figure}
-\subsection{Konjunkcija}
-\subsubsection{Operacija}\ \\ \ \\
-Konjunkcija vrne 1, kadar imata oba vhoda vrednost 1.
-\ \\ \ \\
-Enačba: $ out = x_1 \wedge x_2 $
+\subsection{Konjunkcija (AND)}
+\subsubsection{Opis operacije}\ \\ \ \\
+Konjunkcija vrne 1 natanko takrat, kadar imata oba vhoda vrednost 1.
+\ \\
 \begin{table}[H]
+\begin{center}
+Enačba: $ Y = X_1 \wedge X_2 $\\ \ \\
 \begin{tabular}{ | c | c || c | }\hline
-$x_1$ & $x_2$ & out \\ \hline
+$X_1$ & $X_2$ & $Y$ \\ \hline
 0 & 0 & 0\\
 0 & 1 & 0\\
 1 & 0 & 0\\
 1 & 1 & 1\\ \hline
-\end{tabular}
+\end{tabular}\\ \ \\ \ \\
+Pravilnostna tabela AND
+\end{center}
 \end{table}
 
 \subsubsection{Realizacija}\ \\ \ \\
-Konjunkcijo (operacijo AND) smo realizirali z majoritetnimi vrati, ki imajo enega izmed vhodov nastavljenega na polarizacijo -1.
+Konjunkcijo smo realizirali z majoritetnimi vrati, ki imajo enega izmed vhodov nastavljenega na polarizacijo -1.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=5cm]{qca/img/AND}
@@ -152,15 +197,17 @@ Konjunkcijo (operacijo AND) smo realizirali z majoritetnimi vrati, ki imajo eneg
 \end{center}
 \end{figure}
 
-\subsection{Seštevalnik/odštevalnik}
-\subsubsection{Operacija}\ \\ \ \\
-Seštevalnik sešteje bita, hkrati pa upošteva in izračuna še bit za prenos.
-\ \\ \ \\
-Enačba: $ out = (x_1 \oplus x_2) \oplus c$\\
-$c_{out} = (x_1 \wedge x_2) \vee (c \wedge x_2) \vee (c \wedge x_1) $
+\subsection{Seštevalnik(ADD) / Odštevalnik(SUB)}
+\subsubsection{Opis operacije}\ \\ \ \\
+Seštevalnik izvede seštevanje vhodov $X_1$, $X_2$ in prenosa $C$. Izhoda sta vsota vseh treh vhodov, ter prenos, ki se v naši enoti prenese nazaj kot prenos $C$ za naslednje seštevanje.
+\ \\
 \begin{table}[H]
+\begin{center}
+Enačba:\\
+$Y = (X_1 \oplus X_2) \oplus C$\\
+$C_{out} = (X_1 \wedge X_2) \vee (C \wedge X_2) \vee (C \wedge X_1) $\\ \ \\
 \begin{tabular}{ | c | c | c || c | c | }\hline
-$x_1$ & $x_2$ & $c$ & out & $c_{out}$ \\ \hline
+$X_1$ & $X_2$ & $C$ & $Y$ & $c_{out}$ \\ \hline
 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 1 & 1 & 0\\
 0 & 1 & 0 & 1 & 0\\
@@ -169,16 +216,26 @@ $x_1$ & $x_2$ & $c$ & out & $c_{out}$ \\ \hline
 1 & 0 & 1 & 0 & 1\\
 1 & 1 & 0 & 0 & 1\\
 1 & 1 & 1 & 1 & 1\\ \hline
-\end{tabular}
+\end{tabular}\\ \ \\ \ \\
+Pravilnostna tabela ADD
+\end{center}
 \end{table}
 \ \\
-Odštevalnik podobno odšteje vhodna bita in upošteva prenose.
-\ \\ \ \\
-Enačba: $ out = (x_1 \oplus x_2) \oplus c$\\
-$c_{out} = (c \wedge \overline{(x_1 \oplus x_2)}) \vee (\overline{x_1} \wedge x_2) $
+\begin{figure}[H]
+\includegraphics[width=14cm]{vezja/img/adder}
+\caption{Seštevalnik}
+\label{sestevalnik}
+\end{figure}
+\ \\
+Odštevalnik deluje zelo podobno seštevalniku, le da vhode odšteje med seboj.
+\ \\
 \begin{table}[H]
+\begin{center}
+Enačba:\\
+$Y = (X_1 \oplus X_2) \oplus C$\\
+$C_{out} = (C \wedge (X_1 \equiv X_2)) \vee (\overline{X_1} \wedge X_2) $\\ \ \\
 \begin{tabular}{ | c | c | c || c | c | }\hline
-$x_1$ & $x_2$ & $c$ & out & $c_{out}$ \\ \hline
+$X_1$ & $X_2$ & $C$ & $Y$ & $C_{out}$ \\ \hline
 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 1 & 1 & 1\\
 0 & 1 & 0 & 1 & 1\\
@@ -187,30 +244,64 @@ $x_1$ & $x_2$ & $c$ & out & $c_{out}$ \\ \hline
 1 & 0 & 1 & 0 & 0\\
 1 & 1 & 0 & 0 & 0\\
 1 & 1 & 1 & 1 & 1\\ \hline
-\end{tabular}
+\end{tabular}\\ \ \\ \ \\
+Pravilnostna tabela SUB
+\end{center}
 \end{table}
 
 \subsubsection{Realizacija}\ \\ \ \\
-Seštevalnik in odštevalnik (operaciji ADD in SUB), smo želeli realizirali skupaj -- pri odštevanju drugo število negiramo in mu pri prvem bitu prištejemo 1, kot da bi bilo zapisano v predstavitvi z dvojnim komplementom. To smo realizirali tako, da je možno določiti carry bit in bi ga pri prvem bitu operacije nastavili na 1.
-
+Seštevalnik in odštevalnik (operaciji ADD in SUB), smo želeli realizirali v eni enoti. Pri tem smo se pri odštevanju obnašali, kot bi operirali v predstavitvi z dvojnim komplementom. To pomeni, da $X_2$ negiramo in ob prvem odštevanju $C$ nastavimo na 1.\\
+\ \\
+\begin{minipage}[H]{16cm}
+Naša realizacija seštevalnika:
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=15cm]{qca/img/adder}
+\includegraphics[width=16cm]{qca/img/sum}
 \caption{Seštevalnik}
 \label{sestevalnikqca}
 \end{center}
 \end{figure}
+Prikaz delovanja seštevalnika:
+\begin{figure}[H]
+\includegraphics[width=14cm]{simulacije/1+1}
+\caption{1+1=2}
+\label{1+1}
+\end{figure}
+\end{minipage}
+\begin{minipage}[H]{16cm}
+\begin{figure}[H]
+\includegraphics[width=14cm]{simulacije/3+15}
+\caption{3+15=18}
+\label{3+15}
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=14cm]{simulacije/long}
+\caption{Seštevanje večjih števil}
+\label{sestevalnik}
+\end{figure}
+\end{minipage}
+
+\pagebreak
+\subsection{Težave s QCAdesignerjem}
+Pri delu s programom QCAdesigner smo na žalost naleteli na veliko težav.
+\begin{itemize}
+\item Zelo pogosto sesuvanje programa
+\item Nedelovanje Linux verzije programa v Ubuntu 11.10
+\item Naključno brisanje, zaklepanje in nedelovanje vektorske tabele pri simulaciji
+\item Problem z decimalnimi vejicami oz. pikami pri shranjenih datotekah
+\item Občasno precej naključni in popolnoma nepričakovani rezultati simulacij in to že pri preprostih vezjih
+\end{itemize}
 
 \begin{figure}[H]
-\includegraphics[width=14cm]{vezja/img/adder}
-\caption{Seštevalnik}
-\label{sestevalnik}
+\begin{center}
+\includegraphics[width=14cm]{qca/img/screenshot}
+\end{center}
 \end{figure}
 
 %
 %%
 \section{Zaključek}
-Z veliko truda in težavami s QCAdesigner-jem, nam je uspelo realizirati posamezne dele ALE, ni pa nam uspelo komponent sestaviti skupaj.
+Z veliko truda in precejšnjimi težavami s QCAdesigner-jem, nam je uspelo realizirati posamezne dele ALE, ni pa nam uspelo komponent sestaviti skupaj v delujočo ALE.
 
 %
 %%
