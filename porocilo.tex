@@ -123,7 +123,8 @@ Izbira med ADD in SUB:\\
 \end{figure}
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=13cm]{qca/img/demuxmux}
+%zidar
+\includegraphics[width=13cm]{qca/img/IzbiraOdstevalnika}
 \end{center}
 \end{figure}
 \end{minipage}
@@ -161,7 +162,7 @@ Pravilnostna tabela NOT
 \end{table}
 
 \subsubsection{Realizacija}\ \\ \ \\
-Negacijo smo realizirali s polovičnim zamikom QCA celic.
+Negacijo smo realizirali z zamikom QCA celic.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=8cm]{qca/img/NOT}
@@ -207,7 +208,7 @@ Enačba:\\
 $Y = (X_1 \oplus X_2) \oplus C$\\
 $C_{out} = (X_1 \wedge X_2) \vee (C \wedge X_2) \vee (C \wedge X_1) $\\ \ \\
 \begin{tabular}{ | c | c | c || c | c | }\hline
-$X_1$ & $X_2$ & $C$ & $Y$ & $c_{out}$ \\ \hline
+$X_1$ & $X_2$ & $C$ & $Y$ & $C_{out}$ \\ \hline
 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 1 & 1 & 0\\
 0 & 1 & 0 & 1 & 0\\
@@ -231,6 +232,7 @@ Odštevalnik deluje zelo podobno seštevalniku, le da vhode odšteje med seboj.
 \ \\
 \begin{table}[H]
 \begin{center}
+%zidar
 Enačba:\\
 $Y = (X_1 \oplus X_2) \oplus C$\\
 $C_{out} = (C \wedge (X_1 \equiv X_2)) \vee (\overline{X_1} \wedge X_2) $\\ \ \\
@@ -270,16 +272,19 @@ Prikaz delovanja seštevalnika:
 \end{minipage}
 \begin{minipage}[H]{16cm}
 \begin{figure}[H]
-\includegraphics[width=14cm]{simulacije/3+15}
-\caption{3+15=18}
-\label{3+15}
+\includegraphics[width=14cm]{qca/img/sestevalnikTrace}
+\caption{Seštevanje}
 \end{figure}
+\begin{figure}[H]
+\includegraphics[width=14cm]{qca/img/odstevalnikTrace}
+\caption{Odštevanje}
+\end{figure}
+\end{minipage}
 \begin{figure}[H]
 \includegraphics[width=14cm]{simulacije/long}
 \caption{Seštevanje večjih števil}
 \label{sestevalnik}
 \end{figure}
-\end{minipage}
 
 \pagebreak
 \subsection{Težave s QCAdesignerjem}
